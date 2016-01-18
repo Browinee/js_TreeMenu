@@ -73,25 +73,26 @@ function printList(key, value) {
     var ul = document.createElement("ul");
     var li = document.createElement("li");
 
-    //if ( "name" == key ) {
-
-
-    if ( "name" == key && myBody.getElementsByTagName('ul').length == 0) {
+    if ( myBody.getElementsByTagName('ul').length == 0 ) {
         myBody.appendChild(ul);
+        ul.appendChild(li);
+        console.log("Add body");
     } else {
-        if ( "name" == key ) {
+        if ( "name" != key && "data" != key) {
+          console.log("Running 0 key, the key is: "+key);
             var ulAll = document.getElementsByTagName("ul");
             ulAll[ulAll.length - 1].appendChild(ul);
-        // u = document.getElementsByTagName("ul")[0];
-        // u.appendChild(ul);
+          console.log("Now we got "+ulAll.length+" ul");
         } else {
-
+          console.log("Running li");
+            var liAll = document.getElementsByTagName("li");
+            liAll[liAll.length - 1].innerHTML = value;
+            // li.innerHTML = value;
+            // ul.appendChild(li);
         }
     }
-    li.innerHTML = value;
-    ul.appendChild(li);
-    //}
 }
+
 
 //printAndRetrieve(data, document.getElementsByTagName("body")[0]);
 
