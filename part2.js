@@ -72,23 +72,24 @@ function printList(key, value) {
     var myBody = document.getElementsByTagName("body")[0];
     var ul = document.createElement("ul");
     var li = document.createElement("li");
+    var ulAll = document.getElementsByTagName("ul");
 
     if ( myBody.getElementsByTagName('ul').length == 0 ) {
         myBody.appendChild(ul);
         ul.appendChild(li);
         console.log("Add body");
+        return;
     } else {
-        if ( "name" != key && "data" != key) {
+        if ( 0 == key ) {
           console.log("Running 0 key, the key is: "+key);
-            var ulAll = document.getElementsByTagName("ul");
             ulAll[ulAll.length - 1].appendChild(ul);
           console.log("Now we got "+ulAll.length+" ul");
         } else {
           console.log("Running li");
-            var liAll = document.getElementsByTagName("li");
-            liAll[liAll.length - 1].innerHTML = value;
-            // li.innerHTML = value;
-            // ul.appendChild(li);
+            // var liAll = document.getElementsByTagName("li");
+            // liAll[liAll.length - 1].innerHTML = value;
+            li.innerHTML = value;
+            ulAll[ulAll.length - 1].appendChild(li);
         }
     }
 }
