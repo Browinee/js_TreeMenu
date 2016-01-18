@@ -1,0 +1,24 @@
+ul {
+    list-style: none;
+    padding:0 10px;
+    margin:0;
+    border-left: 2px dotted black;
+    border-color: blue;
+}
+#clearBorder{
+    border-left: none;
+}
+
+li {
+    padding:0.8em 0.5em 0;
+}
+
+li.clearPadding{
+    padding:0 0.5em;
+    margin-top:5px;
+}
+
+li:before {
+    content: "• ";
+    color: blue;
+}
