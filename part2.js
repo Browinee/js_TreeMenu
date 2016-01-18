@@ -73,6 +73,7 @@ function printList(key, value) {
     var ul = document.createElement("ul");
     var li = document.createElement("li");
     var ulAll = document.getElementsByTagName("ul");
+    var lengthSub = 1;
 
     if ( myBody.getElementsByTagName('ul').length == 0 ) {
         myBody.appendChild(ul);
@@ -88,8 +89,12 @@ function printList(key, value) {
           console.log("Running li");
             // var liAll = document.getElementsByTagName("li");
             // liAll[liAll.length - 1].innerHTML = value;
-            li.innerHTML = value;
-            ulAll[ulAll.length - 1].appendChild(li);
+            if ( "name" == key ) {
+                li.innerHTML = value;
+                ulAll[ulAll.length - lengthSub].appendChild(li);
+            } else if ( "data" == null ) {
+                lengthSub++;
+          }
         }
     }
 }
