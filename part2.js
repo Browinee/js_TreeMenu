@@ -92,7 +92,7 @@ function printList(key, value) {
             if ( "name" == key ) {
                 li.innerHTML = value;
                 ulAll[ulAll.length - lengthSub].appendChild(li);
-            } else if ( "data" == null ) {
+            } else if ( "data" == key && value == null ) {
                 lengthSub++;
           }
         }
