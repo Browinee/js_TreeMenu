@@ -71,8 +71,8 @@ console.log("----------------------------");
 //------------------------------
 var lengthSub = 1;
 var layer = 0;
-var nullData = false;
-var passNumbers = false;  // pass this round if key == 1 or 2
+var beganWithNullData = false;
+var bypassNumbers = false;  // pass this round if key == 1 or 2
 var tmpName, rollback;
 //------------------------------
 
@@ -109,31 +109,41 @@ function printList(key, value) {
                 break;
             case "data":
                 if ( value == null ) {  //at end-point
-                    if (nullData) // Last one is a sibling, add li
-                        liAll[liAll.length - 1].appendChild(li);
+                    if (beganWithNullData) // Last one is a sibling, add li
+                        insertAfter(li, liAll[liAll.length - 1]);
+                        //liAll[liAll.length - 1].appendChild(li);
                     console.log("add child for null");
                     //---------------------------
+                    debugger;
                     addNameIntoLi( liAll[liAll.length - 1] );
                     rollback = true;
-                    passNumbers = true;
-                    nullData = true;
+                    bypassNumbers = true;
+                    beganWithNullData = true;
                 } else {
-                    nullData = false;
+                    debugger;
+                    beganWithNullData = false;
                      if (rollback) {
                      //it's parents node
+                          rollback = false;
                           console.log("let's rise!");
                           //---------------------------
-                          var LiTarget = document.getElementsByTagName("li")[0];
+                          var LiTarget = document.getElementsByTagName("li");
                           for ( var i = 0; i < layer - 1; i++ ) {
                               console.log("Now, i="+i+", layer = "+layer);
-                              LiTarget = LiTarget.getElementsByTagName("li")[0];
-                              console.log(LiTarget);
+                              console.log(LiTarget.length);
+                              LiTarget[0] = i == layer - 2 ?
+                                  LiTarget[0].getElementsByTagName("li")[LiTarget.length -1] :
+                                  LiTarget[0].getElementsByTagName("li")[0];
+                              console.log(LiTarget.length);
                             }
                           //addNameIntoLi(LiTarget);
                           var nameNode = document.createTextNode(tmpName);
                           li.appendChild(nameNode);
-                          insertAfter(li, LiTarget);
+                          insertAfter(li, LiTarget[0]);
+                          console.log("insert: "+li);
+                          console.log(document.getElementsByTagName("li"));
                           layer -= 1;
+                          console.log("Now, Layer = "+layer);
                      } else {
                         addNameIntoLi( liAll[liAll.length - 1] );
                         console.log("add name!");
@@ -143,12 +153,12 @@ function printList(key, value) {
                 break;
             case "1":
             case "2":
-                if (passNumbers) {
-                    passNumbers = false;  break;
+                if (bypassNumbers) {
+                    bypassNumbers = false;  break;
                 }
 
                 addNameIntoLi( liAll[liAll.length - 1] );
-                console.log("added a child node.");
+                console.log("added a child node in numbers.");
                 // var nameNode = document.createTextNode(tmpName);
                 // console.log("ID: "+nameNode+" / Sub: "+lengthSub);
                 //---------------------------
@@ -178,7 +188,7 @@ function printList(key, value) {
 
             if ( "data" == key && value == null ||
                   1 == key || 2 == key ) {
-                    //nullData = true;
+                    //beganWithNullData = true;
                 //li.innerHTML = value;
                 var nameNode = document.createTextNode(tmpName);
   console.log("ID: "+nameNode+" / Sub: "+lengthSub);
@@ -214,8 +224,11 @@ function process(key,value) {
 }
 var q=0;
 function traverse(obj,func) {
+    console.log("~~~~~~~~obj: "+obj+"~~~~~~~");
+    if (!obj) return; //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     for (var i in obj) {
-        func.apply( this, [i, obj[i] ] );
+        if ( "name" == i )
+            func.apply( this, [i, obj[i] ] );
         if (obj[i] !== null && typeof(obj[i])=="object") {
             console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
             //going on step down in the object tree!!
@@ -228,5 +241,65 @@ function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
-traverse(data,printList);
-// traverse(data,process);
+function createLiNode(key, value) {
+    var li = document.createElement("li");
+    var nameNode = document.createTextNode(value);
+    li.appendChild(nameNode);
+    return li;
+}
+
+
+
+
+
+
+
+
+var myBody = document.getElementsByTagName("body")[0];
+if ( myBody.getElementsByTagName('ul').length == 0 ) {
+//set root ul
+    var ul = document.createElement("ul");
+    var li = document.createElement("li");
+    myBody.appendChild(ul);
+    ul.appendChild(li);
+    console.log("Add body");
+}
+
+
+
+
+
+
+
+
+
+
+// traverse(data,printList);
+traverse(data,process);
+// traverse(data,createLiNode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function BackUpTraverse(obj,func) {
+    for (var i in obj) {
+        func.apply( this, [i, obj[i] ] );
+        if (obj[i] !== null && typeof(obj[i])=="object") {
+            console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
+            //going on step down in the object tree!!
+            traverse(obj[i],func);
+        }
+    }
+}
