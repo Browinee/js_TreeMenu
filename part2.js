@@ -98,3 +98,6 @@ ul.id = "clearBorder";
 // var q = 0;  // ----- for debug -----
 
 traverse(data,createLiNode, ul);
+
+//var tree = new Tree(data);
+//tree.Render(myBody);
