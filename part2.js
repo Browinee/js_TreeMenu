@@ -275,10 +275,11 @@ if ( myBody.getElementsByTagName('ul').length == 0 ) {
 
 
 // traverse(data,printList);
-traverse(data,process);
+//traverse(data,process);
 // traverse(data,createLiNode);
 
 
+BackUpTraverse(data,process);
 
 
 
@@ -294,8 +295,10 @@ traverse(data,process);
 
 
 function BackUpTraverse(obj,func) {
+  console.log("~~~~~~~~working on obj: "+obj+"~~~~~~~");
     for (var i in obj) {
         func.apply( this, [i, obj[i] ] );
+        console.log("applied:"+ i +" and "+obj[i]);
         if (obj[i] !== null && typeof(obj[i])=="object") {
             console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
             //going on step down in the object tree!!
