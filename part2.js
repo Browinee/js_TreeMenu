@@ -47,9 +47,10 @@ function createLiNode(key, value) {
     return li;
 }
 
-// function insertAfter(newNode, referenceNode) {
-//     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-// }
+function setClass4Leaf() {
+    var liAll = document.getElementsByTagName("li");
+    liAll[liAll.length - 1].setAttribute("class","clearPadding");
+}
 
 function traverse(obj, func, pos) {
 //  debugger;
@@ -61,24 +62,27 @@ function traverse(obj, func, pos) {
             console.log("set name = "+obj[i]+" at "+pos);
         }
 
+        if ( i == "data" && obj[i] == null ){
+            setClass4Leaf();
+        }
+
         if ( obj[i] !== null && typeof(obj[i]) == "object" ) {
 
           console.log("inside, key: "+i);
-            debugger;
             if (i != 0 && i != 1 && i != 2) {
                 var ul = document.createElement("ul");
                 pos.insertAdjacentElement("beforeEnd", ul);
-   //debugger;
                 var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
                 console.log("ul added");
                 console.log("next pos: "+posNext);
                 console.log("============== key= "+i+" | value="+obj[i]+"==============");
-      //                                      debugger;
                 traverse(obj[i], func, posNext);
+            } else if (i == 1 || i == 2) {
+                setClass4Leaf();
+                traverse(obj[i], func, pos);
             } else {
                 console.log("next pos: "+pos);
                 console.log("============== key= "+i+" | value="+obj[i]+"==============");
- //                           debugger;
                 traverse(obj[i], func, pos);
             }
         }
