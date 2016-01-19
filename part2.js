@@ -28,25 +28,135 @@ var data = [
   { name: "Human", data: [] }
 ];
 
+var data2 = [
+  { name: "Animal", data: [
+                  { name: "Mammal", data: null },
 
+          ] },
+  { name: "Human", data: [] }
+];
 
 //---------------------------------------------------------------------------------------
 
+function addNameIntoLi(where) {
+    var nameNode = document.createTextNode(tmpName);
+    where.appendChild(nameNode);
+}
+
+function process(key,value) {
+    console.log(key + " : "+value);
+}
+
+function traverse(obj,func) {
+    console.log("~~~~~~~~obj: "+obj+"~~~~~~~");
+    if (!obj) return; //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    for (var i in obj) {
+        if ( "name" == i )
+            func.apply( this, [i, obj[i] ] );
+        if (obj[i] !== null && typeof(obj[i])=="object") {
+            console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
+            //going on step down in the object tree!!
+            traverse(obj[i],func);
+        }
+    }
+}
+
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+function createLiNode(key, value) {
+    var li = document.createElement("li");
+    var nameNode = document.createTextNode(value);
+    li.appendChild(nameNode);
+    console.log(li);
+    return li;
+}
 
 
+var myBody = document.getElementsByTagName("body")[0];
+var newUL = document.createElement("ul");
+myBody.appendChild(newUL);
+var ul = myBody.getElementsByTagName("ul")[0];
+var q = 0;  // ----- for debug -----
+//traverse(data,printList);
+//traverse(data,process);
+//traverse(data,createLiNode);
+BackUpTraverse(data,createLiNode, ul);
+
+function BackUpTraverse(obj,func,pos) {
+  debugger;
+  console.log("~~~~~~~~ round "+q+" ~~~~~~~");
+  q++;
+    for (var i in obj) {
+        if ( i == "name" ) {
+            pos.appendChild( func.apply( this, [i, obj[i] ] ) );
+            console.log("set name = "+obj[i]+" at "+pos);
+        }
+
+        if (obj[i] !== null && typeof(obj[i])=="object") {
+            var ul = document.createElement("ul");
+            pos.appendChild(ul);
+            var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
+            console.log("next pos: "+posNext);
+            console.log("============== key= "+i+" | value="+obj[i]+"==============");
+            BackUpTraverse(obj[i],func, posNext);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  ----------------------------------------------------------
+//                          discard
+//  ----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 function printAndRetrieve(obj, position) {
     //var theBody = document.getElementsByTagName("body")[0];
-  /*
-    if (obj[0].data) {
-        theBody.appendChild(ul);
-        ul.appendChild(li);
-    } else {
-        obj.parentNode.appendChild(ul);
-        ul.appendChild(li);
-    }
 
-    if (obj[i].data[i] != null) printAndRetrieve(obj[i].data, i+1);
-    */
+    // if (obj[0].data) {
+    //     theBody.appendChild(ul);
+    //     ul.appendChild(li);
+    // } else {
+    //     obj.parentNode.appendChild(ul);
+    //     ul.appendChild(li);
+    // }
+
+    // if (obj[i].data[i] != null) printAndRetrieve(obj[i].data, i+1);
+
     for (var i = 0; i < obj.length; i++) {
 console.log(obj[i].name);
         var ul = document.createElement("ul");
@@ -75,14 +185,12 @@ var beganWithNullData = false;
 var bypassNumbers = false;  // pass this round if key == 1 or 2
 var tmpName, rollback;
 //------------------------------
-
 function printList(key, value) {
     var myBody = document.getElementsByTagName("body")[0];
     var ul = document.createElement("ul");
     var li = document.createElement("li");
     var ulAll = document.getElementsByTagName("ul");
     var liAll = document.getElementsByTagName("li");
-
 
     if ( myBody.getElementsByTagName('ul').length == 0 ) {
     //set root ul
@@ -170,7 +278,7 @@ function printList(key, value) {
                 console.log("ERROR!!!");
         }
 
-        /*
+
         if ( 0 == key ) {
           console.log("0 == key, add ul, the v is: "+value);
             ulAll[ulAll.length - 1].appendChild(ul);
@@ -203,106 +311,9 @@ function printList(key, value) {
 
 
           } else {
-
-
           }
-           */
+
     }
 }
 
 
-function addNameIntoLi(where) {
-    var nameNode = document.createTextNode(tmpName);
-    where.appendChild(nameNode);
-}
-
-//printAndRetrieve(data, document.getElementsByTagName("body")[0]);
-
-
-function process(key,value) {
-    console.log(key + " : "+value);
-}
-var q=0;
-function traverse(obj,func) {
-    console.log("~~~~~~~~obj: "+obj+"~~~~~~~");
-    if (!obj) return; //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    for (var i in obj) {
-        if ( "name" == i )
-            func.apply( this, [i, obj[i] ] );
-        if (obj[i] !== null && typeof(obj[i])=="object") {
-            console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
-            //going on step down in the object tree!!
-            traverse(obj[i],func);
-        }
-    }
-}
-
-function insertAfter(newNode, referenceNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-
-function createLiNode(key, value) {
-    var li = document.createElement("li");
-    var nameNode = document.createTextNode(value);
-    li.appendChild(nameNode);
-    return li;
-}
-
-
-
-
-
-
-
-
-var myBody = document.getElementsByTagName("body")[0];
-if ( myBody.getElementsByTagName('ul').length == 0 ) {
-//set root ul
-    var ul = document.createElement("ul");
-    var li = document.createElement("li");
-    myBody.appendChild(ul);
-    ul.appendChild(li);
-    console.log("Add body");
-}
-
-
-
-
-
-
-
-
-
-
-// traverse(data,printList);
-//traverse(data,process);
-// traverse(data,createLiNode);
-
-
-BackUpTraverse(data,process);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function BackUpTraverse(obj,func) {
-  console.log("~~~~~~~~working on obj: "+obj+"~~~~~~~");
-    for (var i in obj) {
-        func.apply( this, [i, obj[i] ] );
-        console.log("applied:"+ i +" and "+obj[i]);
-        if (obj[i] !== null && typeof(obj[i])=="object") {
-            console.log("==============Round: "+q+" | key= "+i+" | val="+obj[i]+"=============="); q++;
-            //going on step down in the object tree!!
-            traverse(obj[i],func);
-        }
-    }
-}
