@@ -1,7 +1,6 @@
 ul {
     list-style: none;
-    padding:0 8px;
-    margin:0 0 0 10px;
+    padding:0 0.7em;
     border-left: 2px dotted black;
     border-color: blue;
 }
@@ -10,12 +9,12 @@ ul.clearBorder{
 }
 
 li {
-    padding:0.8em 0.5em 0;
+    padding:0.8em 0.6em 0;
 }
 
 li.clearPadding{
-    padding:0 0.5em;
-    margin-top:5px;
+    padding:0 0.6em;
+    margin-top:0.5em;
 }
 
 li:before {

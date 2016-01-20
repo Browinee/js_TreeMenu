@@ -124,7 +124,8 @@ function Tree(data) {
                 // when key == "data" && not a leaf node
                 if (!leaf) {
                     var newUL = document.createElement("ul");
-                    pos.insertAdjacentElement("beforeEnd", newUL);
+                    pos.getElementsByTagName("li")[pos.getElementsByTagName("li").length-1]
+                       .insertAdjacentElement("beforeEnd", newUL);
                     var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
                     traverse(obj[key], func, posNext);
                  }
