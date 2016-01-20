@@ -1,6 +1,6 @@
 "use strict";
-/*
-var data = [
+
+var data2 = [
   { name: "Animal", data: [
                   { name: "Mammal", data: [
                           { name: "Equine", data: [
@@ -27,7 +27,7 @@ var data = [
           ] },
   { name: "Human", data: [] }
 ];
-*/
+
 var data = [
         { name: "系統保留 (C:)", data: [
                         { name: "Program Files", data: [
@@ -104,28 +104,16 @@ var data = [
 function Tree(data) {
     this.data = data;
 
+    //----------------------------------------
     function traverse(obj, func, pos) {
         for ( var key in obj ) {
-            //-------------------- DEBUG --------------------------
-            //console.log("@key: "+key);
-            //-------------------- DEBUG --------------------------
+
             if ( "name" === key ) {
                 var leaf = !obj.data ? true : false;  //currently a leaf node?
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
-                //-------------------- DEBUG --------------------------
-                // console.log("set name = \""+obj[key]+"\" at "+pos);
-                //                 console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-                // console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-                //             +", typeof(value): "+typeof(obj[key]));
-                // console.log("value.length: "+obj[key].length);
-                // if (obj.data) console.log(", obj.data.length: "+obj.data.length);
-                // debugger;
-                //-------------------- DEBUG --------------------------
             }
-            if (leaf) {
-                setClass4Leaf();
-                traverse(obj[key], func, pos);
-            }
+
+            if (leaf)  setClass4Leaf();
 
             if (  "object" === typeof(obj[key]) ) {
                 // when key == [number]
@@ -135,8 +123,8 @@ function Tree(data) {
                 }
                 // when key == "data" && not a leaf node
                 if (!leaf) {
-                    var ul = document.createElement("ul");
-                    pos.insertAdjacentElement("beforeEnd", ul);
+                    var newUL = document.createElement("ul");
+                    pos.insertAdjacentElement("beforeEnd", newUL);
                     var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
                     traverse(obj[key], func, posNext);
                  }
@@ -144,19 +132,21 @@ function Tree(data) {
         } //end for loop
     } //end traverse
 
+    //----------------------------------------
     function createLiNode(itemName) {
-        var li = document.createElement("li");
+        var newLI = document.createElement("li");
         var nameNode = document.createTextNode(itemName);
-        li.appendChild(nameNode);
-        //console.log(li);
-        return li;
+        newLI.appendChild(nameNode);
+        return newLI;
     }
 
+    //----------------------------------------
     function setClass4Leaf() {
-        var liAll = document.getElementsByTagName("li");
-        liAll[liAll.length - 1].setAttribute("class","clearPadding");
+        var allLI = document.getElementsByTagName("li");
+        allLI[allLI.length - 1].setAttribute("class","clearPadding");
     }
 
+    //----------------------------------------
     this.render = function(pos) {
         var firstUL = myBody.getElementsByTagName("ul")[0];
         if ( undefined == firstUL ) {
