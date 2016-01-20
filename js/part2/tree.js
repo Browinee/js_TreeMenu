@@ -6,24 +6,25 @@ function Tree(data) {
         for ( var key in obj ) {
 
             if ( "name" === key ) {
-                var leaf = !obj.data ? true : false;  //currently a leaf node?
+                var isLeaf = obj.data === null ? true : false;  //currently a leaf node?
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
             }
 
-            if (leaf)  setClass4Leaf();
+            if (isLeaf)  setClass4Leaf();
 
             if (  "object" === typeof(obj[key]) ) {
                 // when key == [number]
-                if (leaf === undefined) {
+                if (isLeaf === undefined) {
                     traverse(obj[key], func, pos);
                     continue;
                 }
                 // when key == "data" && not a leaf node
-                if (!leaf) {
+                if (!isLeaf) {
                     var newUL = document.createElement("ul");
-                    pos.getElementsByTagName("li")[pos.getElementsByTagName("li").length-1]
+                    pos.getElementsByTagName("li")[pos.getElementsByTagName("li").length - 1]
                        .insertAdjacentElement("beforeEnd", newUL);
-                    var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
+                    var posNext =
+                        pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length - 1];
                     traverse(obj[key], func, posNext);
                  }
             }
