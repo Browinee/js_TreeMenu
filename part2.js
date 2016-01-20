@@ -48,56 +48,86 @@ function Tree(data){
     function traverse(obj, func, pos) {
         //  console.log("~~~~~~~~ round "+q+" ~~~~~~~~");
         //  q++;
-        for ( var key in obj ) {
 
+        for ( var key in obj ) {
+            debugger;
+            var val = obj[key];
+            //-------------------- DEBUG --------------------------
             console.log("@key: "+key);
+            //-------------------- DEBUG --------------------------
 
             if ( "name" === key ) {
+                var leaf = !obj.data ? true : false;  //currently a leaf node?
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
-                console.log("set name = \""+obj[key]+"\" at "+pos);
-                                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-                            +", typeof(value): "+typeof(obj[key]));
-                console.log("value.length: "+obj[key].length);
-                                debugger;
+                //-------------------- DEBUG --------------------------
+                // console.log("set name = \""+obj[key]+"\" at "+pos);
+                //                 console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+                // console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+                //             +", typeof(value): "+typeof(obj[key]));
+                // console.log("value.length: "+obj[key].length);
+                // if (obj.data) console.log(", obj.data.length: "+obj.data.length);
+                // debugger;
+                //-------------------- DEBUG --------------------------
             }
 
-            if ( "data" === key && null === obj[key] ){
-                setClass4Leaf();
-                console.log("data = null, add class");
-                                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-                            +", typeof(value]): "+typeof(obj[key]));
-                console.log("value.length: null");
-            }
+            if ( null !== obj[key] && "object" === typeof(obj[key]) ) {
 
-            if ( null !== obj[key]  && "object" === typeof(obj[key])) {
-                      //now, obj[key] is an array
-                console.log("inside, we got an object where key != null");
-                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-                            +", typeof(value]): "+typeof(obj[key]));
-                console.log("value.length: "+obj[key].length);
-                debugger;
+                // key == [number]
+                if (leaf === undefined) {
+                    traverse(obj[key], func, pos);
+                    continue;
+                }
 
-                if (key != 0 && key != 1 && key != 2) {
+                // key == "data"
+                if (!leaf) {
                     var ul = document.createElement("ul");
                     pos.insertAdjacentElement("beforeEnd", ul);
                     var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
-                    console.log("ul added");
-                    // console.log("next pos: "+posNext);
-                    // debugger;
-                    console.log("============== key= "+key+" | value="+obj[key]+"==============");
                     traverse(obj[key], func, posNext);
-                } else if (key == 1 || key == 2) {
-                    setClass4Leaf();
-                    traverse(obj[key], func, pos);
+                    console.log("create UL!!!!!!!");
+                    debugger;
                 } else {
-                    // console.log("next pos: "+pos);
-                    console.log("============== key= "+key+" | value="+obj[key]+"==============");
+                    setClass4Leaf();
                     traverse(obj[key], func, pos);
                 }
             }
+
+            // if ( "data" === key && null === obj[key] ){
+            //     setClass4Leaf();
+            //     console.log("data = null, add class");
+            //                     console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+            //     console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+            //                 +", typeof(value]): "+typeof(obj[key]));
+            //     console.log("value.length: null");
+            // }
+
+            // if ( null !== obj[key]  && "object" === typeof(obj[key])) {
+            //           //now, obj[key] is an array
+            //     console.log("inside, we got an object where key != null");
+            //     console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+            //     console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+            //                 +", typeof(value]): "+typeof(obj[key]));
+            //     console.log("value.length: "+obj[key].length);
+            //     debugger;
+
+            //     if (key != 0 && key != 1 && key != 2) {
+            //         var ul = document.createElement("ul");
+            //         pos.insertAdjacentElement("beforeEnd", ul);
+            //         var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
+            //         console.log("ul added");
+            //         // console.log("next pos: "+posNext);
+            //         // debugger;
+            //         console.log("============== key= "+key+" | value="+obj[key]+"==============");
+            //         traverse(obj[key], func, posNext);
+            //     } else if (key == 1 || key == 2) {
+            //         setClass4Leaf();
+            //         traverse(obj[key], func, pos);
+            //     } else {
+            //         // console.log("next pos: "+pos);
+            //         console.log("============== key= "+key+" | value="+obj[key]+"==============");
+            //         traverse(obj[key], func, pos);
+            //     }
+            // }
         }
     }
 
