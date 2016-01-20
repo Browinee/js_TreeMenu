@@ -5,7 +5,7 @@ ul {
     border-left: 2px dotted black;
     border-color: blue;
 }
-#clearBorder{
+ul.clearBorder{
     border-left: none;
 }
 

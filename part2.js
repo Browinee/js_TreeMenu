@@ -28,76 +28,84 @@ var data = [
   { name: "Human", data: [] }
 ];
 
-var data2 = [
-  { name: "Animal", data: [
-                  { name: "Mammal", data: null },
-                  { name: "Reptlle", data: [
-                          { name: "Lizard", data: null }
-                  ] } ] },
-  { name: "Human", data: [] }
-];
-
 //---------------------------------------------------------------------------------------
 
-function createLiNode(key, value) {
-    var li = document.createElement("li");
-    var nameNode = document.createTextNode(value);
-    li.appendChild(nameNode);
-    console.log(li);
-    return li;
-}
+function Tree(data){
 
-function setClass4Leaf() {
-    var liAll = document.getElementsByTagName("li");
-    liAll[liAll.length - 1].setAttribute("class","clearPadding");
-}
+    this.data = constructor(data);
 
-function traverse(obj, func, pos) {
-//  debugger;
-//  console.log("~~~~~~~~ round "+q+" ~~~~~~~");
-//  q++;
-    for ( var i in obj ) {
-        if ( "name" == i ) {
-            pos.appendChild( func.apply( this, [i, obj[i] ] ) );
-            console.log("set name = "+obj[i]+" at "+pos);
-        }
+    function constructor(data) {
+        var firstUL = myBody.getElementsByTagName("ul")[0];
+        if ( undefined == firstUL ) {
+            var newUL = document.createElement("ul");
+            myBody.appendChild(newUL);
+            firstUL = myBody.getElementsByTagName("ul")[0];
+            firstUL.setAttribute("class","clearBorder");
+            return firstUL;
+        } else
+            return data;
+    }
 
-        if ( i == "data" && obj[i] == null ){
-            setClass4Leaf();
-        }
+    function traverse(obj, func, pos) {
+        //  console.log("~~~~~~~~ round "+q+" ~~~~~~~~");
+        //  q++;
+        for ( var i in obj ) {
+            if ( "name" == i ) {
+                pos.appendChild( func.apply( this, [i, obj[i] ] ) );
+                console.log("set name = "+obj[i]+" at "+pos);
+            }
 
-        if ( obj[i] !== null && typeof(obj[i]) == "object" ) {
-
-          console.log("inside, key: "+i);
-            if (i != 0 && i != 1 && i != 2) {
-                var ul = document.createElement("ul");
-                pos.insertAdjacentElement("beforeEnd", ul);
-                var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
-                console.log("ul added");
-                console.log("next pos: "+posNext);
-                console.log("============== key= "+i+" | value="+obj[i]+"==============");
-                traverse(obj[i], func, posNext);
-            } else if (i == 1 || i == 2) {
+            if ( i == "data" && obj[i] == null ){
                 setClass4Leaf();
-                traverse(obj[i], func, pos);
-            } else {
-                console.log("next pos: "+pos);
-                console.log("============== key= "+i+" | value="+obj[i]+"==============");
-                traverse(obj[i], func, pos);
+            }
+
+            if ( obj[i] !== null && typeof(obj[i]) == "object" ) {
+
+              console.log("inside, key: "+i);
+                if (i != 0 && i != 1 && i != 2) {
+                    var ul = document.createElement("ul");
+                    pos.insertAdjacentElement("beforeEnd", ul);
+                    var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
+                    console.log("ul added");
+                    console.log("next pos: "+posNext);
+                    console.log("============== key= "+i+" | value="+obj[i]+"==============");
+                    traverse(obj[i], func, posNext);
+                } else if (i == 1 || i == 2) {
+                    setClass4Leaf();
+                    traverse(obj[i], func, pos);
+                } else {
+                    console.log("next pos: "+pos);
+                    console.log("============== key= "+i+" | value="+obj[i]+"==============");
+                    traverse(obj[i], func, pos);
+                }
             }
         }
     }
+
+    function createLiNode(key, value) {
+        var li = document.createElement("li");
+        var nameNode = document.createTextNode(value);
+        li.appendChild(nameNode);
+        console.log(li);
+        return li;
+    }
+
+    function setClass4Leaf() {
+        var liAll = document.getElementsByTagName("li");
+        liAll[liAll.length - 1].setAttribute("class","clearPadding");
+    }
+
+    this.Render = function(pos) {
+        traverse(data, createLiNode, pos);
+    }
 }
 
+//---------------------------------------------------------------------------------------
+
+
+// var q = 0;  // ----- for counting round -----
+
+
 var myBody = document.getElementsByTagName("body")[0];
-var newUL = document.createElement("ul");
-myBody.appendChild(newUL);
-var ul = myBody.getElementsByTagName("ul")[0];
-ul.id = "clearBorder";
-
-// var q = 0;  // ----- for debug -----
-
-traverse(data,createLiNode, ul);
-
-//var tree = new Tree(data);
-//tree.Render(myBody);
+var tree = new Tree(data);
+tree.Render(myBody);
