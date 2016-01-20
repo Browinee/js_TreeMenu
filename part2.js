@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 var data = [
   { name: "Animal", data: [
                   { name: "Mammal", data: [
@@ -27,35 +27,88 @@ var data = [
           ] },
   { name: "Human", data: [] }
 ];
+*/
+var data = [
+        { name: "系統保留 (C:)", data: [
+                        { name: "Program Files", data: [
+                                { name: "Java", data: [
+                                        { name: "jdk1.8.0_60", data: null },
+                                        { name: "jre1.8.0_60", data: null }
+                                        ] },
+                                { name: "Sublime Text 2", data: [
+                                        { name: "Pristine Packages", data: [
+                                                { name: "ActionScript.sublime-package" },
+                                                { name: "C#.sublime-package" },
+                                                { name: "C++.sublime-package" },
+                                                { name: "CSS.sublime-package" }
+                                                ] },
+                                        { name: "sublime_text.exe" },
+                                        { name: "python26.zip" },
+                                        { name: "python26.dll" }
+                                        ] },
+                                { name: "Microsoft.Net", data: [
+                                        { name: "ADOBD.NET", data: [
+                                                { name: "100", data: [
+                                                        { name: "Microsoft.AnalysisServices.AdomdClient.dll" }
+                                                        ] }
+                                                ] }
+                                ] },
+                        { name: "Program Files (x86)", data: [
+                                { name: "Adobe", data: [
+                                        { name: "Acrobat Reader DC", data: [
+                                                { name: "Esl", data: [
+                                                        { name: "AiodLite.dll" }
+                                                        ] },
+                                                { name: "Reader", data: [
+                                                        { name: "plug_ins", data: [
+                                                                { name: "AcroForm", data: [
+                                                                        { name: "PMP", data: [
+                                                                                { name: "AdobePDF417.pmp" },
+                                                                                { name: "DataMatrix.pmp" },
+                                                                                { name: "QRCode.pmp" }
+                                                                                ] },
+                                                                        { name: "adobepdf.xdc" }
+                                                                        ] },
+                                                                        { name: "Multimedia.api" }
+                                                                ] },
+                                                        { name: "ACE.dll" },
+                                                        { name: "WebResources", data: [
+                                                                { name: "Resource0", data: [
+                                                                        { name: "static", data: [
+                                                                                { name: "css", data: [
+                                                                                        { name: "app", data: [
+                                                                                                { name: "dev", data: [
+                                                                                                        { name: "cef" },
+                                                                                                        { name: "libs" }
+                                                                                                        ] }
+                                                                                                ] },
+                                                                                        { name: "main.css" }
+                                                                                        ] }
+                                                                                ] },
+                                                                        { name: "index.html" }
+                                                                        ] }
+                                                                ] }
+                                                        ] },
+                                                { name: "ReadMe.htm" },
+                                                { name: "ReadMeCT.htm" }
+                                                ] }
+                                        ] }
+                                ] }
+                        ] }
+                ] },
+        { name: "本機磁碟 (D:)", data: [] }
+];
 
 //---------------------------------------------------------------------------------------
 
-function Tree(data){
-    this.data = constructor(data);
-
-    function constructor(data) {
-        var firstUL = myBody.getElementsByTagName("ul")[0];
-        if ( undefined == firstUL ) {
-            var newUL = document.createElement("ul");
-            myBody.appendChild(newUL);
-            firstUL = myBody.getElementsByTagName("ul")[0];
-            firstUL.setAttribute("class","clearBorder");
-            return firstUL;
-        } else
-            return data;
-    }
+function Tree(data) {
+    this.data = data;
 
     function traverse(obj, func, pos) {
-        //  console.log("~~~~~~~~ round "+q+" ~~~~~~~~");
-        //  q++;
-
         for ( var key in obj ) {
-            debugger;
-            var val = obj[key];
             //-------------------- DEBUG --------------------------
-            console.log("@key: "+key);
+            //console.log("@key: "+key);
             //-------------------- DEBUG --------------------------
-
             if ( "name" === key ) {
                 var leaf = !obj.data ? true : false;  //currently a leaf node?
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
@@ -69,67 +122,27 @@ function Tree(data){
                 // debugger;
                 //-------------------- DEBUG --------------------------
             }
+            if (leaf) {
+                setClass4Leaf();
+                traverse(obj[key], func, pos);
+            }
 
-            if ( null !== obj[key] && "object" === typeof(obj[key]) ) {
-
-                // key == [number]
+            if (  "object" === typeof(obj[key]) ) {
+                // when key == [number]
                 if (leaf === undefined) {
                     traverse(obj[key], func, pos);
                     continue;
                 }
-
-                // key == "data"
+                // when key == "data" && not a leaf node
                 if (!leaf) {
                     var ul = document.createElement("ul");
                     pos.insertAdjacentElement("beforeEnd", ul);
                     var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
                     traverse(obj[key], func, posNext);
-                    console.log("create UL!!!!!!!");
-                    debugger;
-                } else {
-                    setClass4Leaf();
-                    traverse(obj[key], func, pos);
-                }
+                 }
             }
-
-            // if ( "data" === key && null === obj[key] ){
-            //     setClass4Leaf();
-            //     console.log("data = null, add class");
-            //                     console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-            //     console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-            //                 +", typeof(value]): "+typeof(obj[key]));
-            //     console.log("value.length: null");
-            // }
-
-            // if ( null !== obj[key]  && "object" === typeof(obj[key])) {
-            //           //now, obj[key] is an array
-            //     console.log("inside, we got an object where key != null");
-            //     console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
-            //     console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
-            //                 +", typeof(value]): "+typeof(obj[key]));
-            //     console.log("value.length: "+obj[key].length);
-            //     debugger;
-
-            //     if (key != 0 && key != 1 && key != 2) {
-            //         var ul = document.createElement("ul");
-            //         pos.insertAdjacentElement("beforeEnd", ul);
-            //         var posNext = pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length-1];
-            //         console.log("ul added");
-            //         // console.log("next pos: "+posNext);
-            //         // debugger;
-            //         console.log("============== key= "+key+" | value="+obj[key]+"==============");
-            //         traverse(obj[key], func, posNext);
-            //     } else if (key == 1 || key == 2) {
-            //         setClass4Leaf();
-            //         traverse(obj[key], func, pos);
-            //     } else {
-            //         // console.log("next pos: "+pos);
-            //         console.log("============== key= "+key+" | value="+obj[key]+"==============");
-            //         traverse(obj[key], func, pos);
-            //     }
-            // }
-        }
-    }
+        } //end for loop
+    } //end traverse
 
     function createLiNode(itemName) {
         var li = document.createElement("li");
@@ -144,15 +157,21 @@ function Tree(data){
         liAll[liAll.length - 1].setAttribute("class","clearPadding");
     }
 
-    this.Render = function(pos) {
-        traverse(data, createLiNode, pos);
+    this.render = function(pos) {
+        var firstUL = myBody.getElementsByTagName("ul")[0];
+        if ( undefined == firstUL ) {
+            var newUL = document.createElement("ul");
+            myBody.appendChild(newUL);
+            firstUL = myBody.getElementsByTagName("ul")[0];
+            firstUL.setAttribute("class","clearBorder");
+            traverse(data, createLiNode, firstUL);
+        } else
+            traverse(data, createLiNode, pos);
     }
-}
+} //End class Tree
 
 //---------------------------------------------------------------------------------------
 
-// var q = 0;  // ----- for counting round -----
-
 var myBody = document.getElementsByTagName("body")[0];
 var tree = new Tree(data);
-tree.Render(myBody);
+tree.render(myBody);
