@@ -50,21 +50,35 @@ function Tree(data){
         //  q++;
         for ( var key in obj ) {
 
-            console.log("key: "+key);
+            console.log("@key: "+key);
 
             if ( "name" === key ) {
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
-                console.log("set name = "+obj[key]+" at "+pos);
+                console.log("set name = \""+obj[key]+"\" at "+pos);
+                                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+                            +", typeof(value): "+typeof(obj[key]));
+                console.log("value.length: "+obj[key].length);
+                                debugger;
             }
 
             if ( "data" === key && null === obj[key] ){
                 setClass4Leaf();
                 console.log("data = null, add class");
+                                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+                            +", typeof(value]): "+typeof(obj[key]));
+                console.log("value.length: null");
             }
 
-            if ( null !== obj[key]  ) { //&& "object" === typeof(obj[key])
+            if ( null !== obj[key]  && "object" === typeof(obj[key])) {
+                      //now, obj[key] is an array
+                console.log("inside, we got an object where key != null");
+                console.log("key: "+key+", obj: "+obj+", value: "+obj[key]);
+                console.log("typeof(key): "+typeof(key)+", typeof(obj): "+typeof(obj)
+                            +", typeof(value]): "+typeof(obj[key]));
+                console.log("value.length: "+obj[key].length);
                 debugger;
-                console.log("inside, key != null");
 
                 if (key != 0 && key != 1 && key != 2) {
                     var ul = document.createElement("ul");
