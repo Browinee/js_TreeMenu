@@ -30,3 +30,10 @@ li.clearPadding{
     background: url('../images/minus.png') center no-repeat;
     background-position: 2px 14px;
 }
+
+.no-show {
+    display: none;
+}
+.show {
+    display: block;
+}
