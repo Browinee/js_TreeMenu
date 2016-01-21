@@ -1,5 +1,7 @@
 function Tree(data) {
     this.data = data;
+    var cssHide = "hide";
+    var cssShow = "show";
 
     //----------------------------------------
     function traverse(obj, func, pos) {
@@ -40,7 +42,7 @@ function Tree(data) {
         newLI.className == '' ? newLI.setAttribute("class","icon-closed") :
                             newLI.className += " icon-closed";
         */
-        addClass(newLI ,"icon-closed");
+        addClass(newLI ,"icon-closed " + cssHide );
         return newLI;
     }
 
@@ -81,7 +83,18 @@ function Tree(data) {
             traverse(data, createLiNode, firstUL);
         } else
             traverse(data, createLiNode, pos);
+
+        for ( var i = 0; i < firstUL.childNodes.length; i++ ) {
+            firstUL.childNodes[i].className =
+                firstUL.childNodes[i].className.replace(RegExp(cssHide), cssShow);
+                // firstUL.childNodes[i].setAttribute("onclick","var tree = New Tree();tree.test()");
+                firstUL.childNodes[i].onclick = test;
+
+            }
     }
+
+    var test = function(e){alert("ha");}
+
 }
 
 /*
