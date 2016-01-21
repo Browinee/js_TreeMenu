@@ -34,8 +34,8 @@ function Tree(data) {
                     traverse(obj[key], func, posNext);
                  }
             }
-        } //end for loop
-    } //end traverse
+        } //--End for loop
+    } //--End traverse
 
     //----------------------------------------
 
@@ -52,7 +52,7 @@ function Tree(data) {
 
     function setClass4Leaf() {
         var allLI = document.getElementsByTagName("li");
-        allLI[allLI.length - 1].setAttribute("class","clearPadding");
+        allLI[allLI.length - 1].setAttribute("class","leaf");
         self.addClass( allLI[allLI.length - 1], cssHide );
     }
 
@@ -60,10 +60,15 @@ function Tree(data) {
 
     function eventSetup(targetArray) {
         for ( var i = 0, length = targetArray.length; i < length; i++ ) {
-            targetArray[i].className =
-                targetArray[i].className.replace(RegExp(cssHide), cssShow);
-                self.removeClass(targetArray[i], cssShow);
+            self.removeClass( targetArray[i], cssHide );
+            if ( targetArray[i].lastChild.innerHTML ) {
                 self.addEvent(targetArray[i], "click", trigger);
+            } else {
+            // begins with a leaf node
+                self.removeClass( targetArray[i], cssIconPlus );
+                self.addClass( targetArray[i], "leaf" );
+            }
+
         }
     }
 
@@ -88,7 +93,10 @@ function Tree(data) {
         }
     }
 
-    //----------------------- public -----------------------
+//----------------------------------------------------------------
+//                            public
+//----------------------------------------------------------------
+
     this.render = function(pos) {
         var firstUL = document.body.getElementsByTagName("ul")[0];
         if ( undefined == firstUL ) {
@@ -104,11 +112,10 @@ function Tree(data) {
         eventSetup(firstUL.childNodes);
     }
 
-}
+}   //--End class Tree
 
     Tree.prototype.hasClass = function(element, className) {
         var reg = new RegExp('(\s|^)*'+className+'(\s|$)');
-        //return !element.className.match(reg) ? false : true;
         return element === null ? false : element.className.match(reg);
     }
 

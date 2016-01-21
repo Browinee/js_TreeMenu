@@ -1,6 +1,6 @@
 ul {
     list-style: none;
-    padding:0 0.7em;
+    padding: 0 0.7em;
     border-left: 2px dotted black;
     border-color: blue;
 }
@@ -8,16 +8,18 @@ ul.clearBorder{
     border-left: none;
 }
 li {
-    padding:0.8em 0.6em 0;
-    text-indent:1em;
+    padding: 0.8em 0.6em 0;
+    text-indent: 1em;
 }
-li.clearPadding{
-    padding:0 0.6em;
-    margin-top:0.5em;
+li.leaf{
+    padding: 0;
+    margin-top: 0.5em;
+    margin-left: -0.6em;
 }
-/*li:before {
-    content: "";
-}*/
+li.leaf:before {
+    content: "• ";
+    color: blue;
+}
 .icon-closed {
     /*display: inline-block;*/
     display: block;
