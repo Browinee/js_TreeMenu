@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 (function(window) {
     var tree = new Tree(data);

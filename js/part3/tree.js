@@ -39,7 +39,8 @@ function Tree(data) {
         var newLI = document.createElement("li");
         var nameNode = document.createTextNode(itemName);
         newLI.appendChild(nameNode);
-        self.addClass(newLI ,"icon-closed " + cssHide );
+        self.addClass(newLI ,"icon-closed");
+        self.addClass(newLI , cssHide);
         return newLI;
     }
 
@@ -60,25 +61,45 @@ function Tree(data) {
             traverse.call(this, data, createLiNode, firstUL);
 
         } else
-            traverse(data, createLiNode, pos);
+            traverse.call(this, data, createLiNode, pos);
 
-        bindFirstSetOfEvents(firstUL.childNodes);
+        eventSetup(firstUL.childNodes);
     }
 
     //----------------------------------------
 
-    function bindFirstSetOfEvents(targetArray) {
+    function eventSetup(targetArray) {
         for ( var i = 0, length = targetArray.length; i < length; i++ ) {
             targetArray[i].className =
                 targetArray[i].className.replace(RegExp(cssHide), cssShow);
                 self.addEvent(targetArray[i], "click", trigger);
-                debugger;
+                // debugger;
+                // self.removeClass(targetArray[i].lastChild.firstChild, "hide")
+               // trigger(targetArray[i].lastChild.firstChild);
+                // debugger;
         }
     }
 
 
-    function trigger(target) {
-        alert(123);
+    function trigger(e) {
+        // debugger;
+        // alert(e.target);
+        // var nodes = e.target.childNodes;
+        // var length = nodes.length;
+
+        if ( e.target.lastChild.nodeName == "UL" ) {
+            var nodes = e.target.lastChild.childNodes;
+            var length = nodes.length;
+            for ( var i = 1; i < length; i++ ) {
+                self.removeClass(nodes[0], "hide");
+            }
+
+        }
+
+
+
+
+        // self.removeClass(v, "hide")
     }
 
 }
@@ -88,19 +109,24 @@ function Tree(data) {
 
     // private ///////////////////////////////////////////////////
     Tree.prototype.hasClass = function(element, className) {
-        var reg = new RegExp('(\s|^)'+className+'(\s|$)');
-        return element.className.match(reg);
+        var reg = new RegExp('(\s|^)*'+className+'(\s|$)');
+        //return !element.className.match(reg) ? false : true;
+        return element === null ? false : element.className.match(reg);
     }
 
     Tree.prototype.addClass = function(element, className) {
-        if (!this.hasClass(element, className))
+        if (!this.hasClass(element, className)) {
             element.className += " "+className;
+            element.className = element.className.trim();
+        }
     }
 
     Tree.prototype.removeClass = function(element, className) {
-        if (hasClass(element, className)) {
-            var reg = new RegExp('(\s|^)'+className+'(\s|$)');
+        // debugger;
+        if (this.hasClass(element, className)) {
+            var reg = new RegExp('(\s|^)*'+className+'(\s|$)*');
             element.className = element.className.replace(reg,' ');
+            element.className = element.className.trim();
         }
     }
 
