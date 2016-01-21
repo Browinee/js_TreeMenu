@@ -24,10 +24,10 @@ function Tree(data) {
                 // when key == "data" && not a leaf node
                 if (!isLeaf) {
                     var newUL = document.createElement("ul");
-                    pos.getElementsByTagName("li")[pos.getElementsByTagName("li").length - 1]
-                       .insertAdjacentElement("beforeEnd", newUL);
-                    var posNext =
-                        pos.getElementsByTagName("ul")[pos.getElementsByTagName("ul").length - 1];
+                    var allLI = pos.getElementsByTagName("li");
+                    var allUL = pos.getElementsByTagName("ul");
+                    allLI[ allLI.length - 1 ].insertAdjacentElement("beforeEnd", newUL);
+                    var posNext = allUL[ allUL.length - 1];
                     traverse(obj[key], func, posNext);
                  }
             }
@@ -68,7 +68,7 @@ function Tree(data) {
     //----------------------------------------
 
     function bindFirstSetOfEvents(targetArray) {
-        for ( var i = 0; i < targetArray.length; i++ ) {
+        for ( var i = 0, length = targetArray.length; i < length; i++ ) {
             targetArray[i].className =
                 targetArray[i].className.replace(RegExp(cssHide), cssShow);
                 self.addEvent(targetArray[i], "click", trigger);
