@@ -1,4 +1,5 @@
 function Tree(data) {
+    var self = this;
     this.data = data;
     var cssHide = "hide";
     var cssShow = "show";
@@ -38,11 +39,7 @@ function Tree(data) {
         var newLI = document.createElement("li");
         var nameNode = document.createTextNode(itemName);
         newLI.appendChild(nameNode);
-        /*
-        newLI.className == '' ? newLI.setAttribute("class","icon-closed") :
-                            newLI.className += " icon-closed";
-        */
-        addClass(newLI ,"icon-closed " + cssHide );
+        self.addClass(newLI ,"icon-closed " + cssHide );
         return newLI;
     }
 
@@ -53,51 +50,43 @@ function Tree(data) {
     }
 
     //----------------------------------------
-
-    function hasClass(element, className) {
-        var reg = new RegExp('(\s|^)'+className+'(\s|$)');
-        return !element.className.match(reg) ? false : true;
-    }
-
-    function addClass(element, className) {
-       if (!hasClass(element, className))
-            element.className += " "+className;
-    }
-
-    function removeClass(element, className) {
-        if (hasClass(element, className)) {
-            var reg = new RegExp('(\s|^)'+className+'(\s|$)');
-            element.className = element.className.replace(reg,' ');
-        }
-    }
-
-    //----------------------------------------
     this.render = function(pos) {
         var firstUL = document.body.getElementsByTagName("ul")[0];
         if ( undefined == firstUL ) {
             var newUL = document.createElement("ul");
             document.body.appendChild(newUL);
             firstUL = document.body.getElementsByTagName("ul")[0];
-            //firstUL.setAttribute("class","clearBorder");
-            addClass(firstUL,"clearBorder");
-            traverse(data, createLiNode, firstUL);
+            self.addClass(firstUL,"clearBorder");
+            traverse.call(this, data, createLiNode, firstUL);
+
         } else
             traverse(data, createLiNode, pos);
 
-        for ( var i = 0; i < firstUL.childNodes.length; i++ ) {
-            firstUL.childNodes[i].className =
-                firstUL.childNodes[i].className.replace(RegExp(cssHide), cssShow);
-                // firstUL.childNodes[i].setAttribute("onclick","var tree = New Tree();tree.test()");
-                firstUL.childNodes[i].onclick = test;
-
-            }
+        bindFirstSetOfEvents(firstUL.childNodes);
     }
 
-    var test = function(e){alert("ha");}
+    //----------------------------------------
+
+    function bindFirstSetOfEvents(targetArray) {
+        for ( var i = 0; i < targetArray.length; i++ ) {
+            targetArray[i].className =
+                targetArray[i].className.replace(RegExp(cssHide), cssShow);
+                self.addEvent(targetArray[i], "click", trigger);
+                debugger;
+        }
+    }
+
+
+    function trigger(target) {
+        alert(123);
+    }
 
 }
 
-/*
+
+
+
+    // private ///////////////////////////////////////////////////
     Tree.prototype.hasClass = function(element, className) {
         var reg = new RegExp('(\s|^)'+className+'(\s|$)');
         return element.className.match(reg);
@@ -114,4 +103,21 @@ function Tree(data) {
             element.className = element.className.replace(reg,' ');
         }
     }
-*/
+
+    Tree.prototype.addEvent = function(obj, type, handle) {
+        try {  // Versions above Chrome、FireFox、Opera、Safari、IE9.0
+            obj.addEventListener(type, handle, false);
+        }catch(e) {
+            try {  // Versions below IE8.0
+                obj.attachEvent('on' + type, handle);
+            }catch(e) {  // Early browser
+                obj['on' + type] = handle;
+            }
+        }
+    }
+    // private ///////////////////////////////////////////////////
+
+    // public ////////////////////////////////////////////////////
+
+    // public ////////////////////////////////////////////////////
+
