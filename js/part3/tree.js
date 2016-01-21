@@ -3,6 +3,8 @@ function Tree(data) {
     this.data = data;
     var cssHide = "hide";
     var cssShow = "show";
+    var cssIconMinus = "icon-opened";
+    var cssIconPlus = "icon-closed";
 
     //----------------------------------------
     function traverse(obj, func, pos) {
@@ -39,8 +41,8 @@ function Tree(data) {
         var newLI = document.createElement("li");
         var nameNode = document.createTextNode(itemName);
         newLI.appendChild(nameNode);
-        self.addClass(newLI ,"icon-closed");
-        self.addClass(newLI , cssHide);
+        self.addClass(newLI, cssIconPlus);
+        self.addClass(newLI, cssHide);
         return newLI;
     }
 
@@ -48,6 +50,7 @@ function Tree(data) {
     function setClass4Leaf() {
         var allLI = document.getElementsByTagName("li");
         allLI[allLI.length - 1].setAttribute("class","clearPadding");
+        self.addClass( allLI[allLI.length - 1], cssHide );
     }
 
     //----------------------------------------
@@ -72,17 +75,17 @@ function Tree(data) {
         for ( var i = 0, length = targetArray.length; i < length; i++ ) {
             targetArray[i].className =
                 targetArray[i].className.replace(RegExp(cssHide), cssShow);
+                self.removeClass(targetArray[i], cssShow);
                 self.addEvent(targetArray[i], "click", trigger);
-                // debugger;
+                    debugger;
                 // self.removeClass(targetArray[i].lastChild.firstChild, "hide")
                // trigger(targetArray[i].lastChild.firstChild);
-                // debugger;
         }
     }
 
 
     function trigger(e) {
-        // debugger;
+        debugger;
         // alert(e.target);
         // var nodes = e.target.childNodes;
         // var length = nodes.length;
@@ -90,11 +93,15 @@ function Tree(data) {
         if ( e.target.lastChild.nodeName == "UL" ) {
             var nodes = e.target.lastChild.childNodes;
             var length = nodes.length;
-            for ( var i = 1; i < length; i++ ) {
-                self.removeClass(nodes[0], "hide");
+            for ( var i = 0; i < length; i++ ) {
+                self.removeClass( nodes[i], cssHide );
+                self.removeClass( e.target, cssIconPlus );
+                self.addClass( e.target, cssIconMinus );
+                self.addEvent(nodes[i], "click", trigger);
+
             }
 
-        }
+        } else alert(123);
 
 
 
@@ -131,6 +138,7 @@ function Tree(data) {
     }
 
     Tree.prototype.addEvent = function(obj, type, handle) {
+            debugger;
         try {  // Versions above Chrome、FireFox、Opera、Safari、IE9.0
             obj.addEventListener(type, handle, false);
         }catch(e) {
