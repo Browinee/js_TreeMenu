@@ -2,7 +2,6 @@ function Tree(data) {
     var self = this;
     this.data = data;
     var cssHide = "hide";
-    var cssShow = "show";
     var cssIconMinus = "icon-opened";
     var cssIconPlus = "icon-closed";
 
