@@ -6,7 +6,7 @@ function Tree(data) {
         for ( var key in obj ) {
 
             if ( "name" === key ) {
-                var isLeaf = obj.data === null ? true : false;  //currently a leaf node?
+                var isLeaf = !obj.data ? true : false;  //currently a leaf node?
                 pos.appendChild( func.apply( this, [ obj[key] ] ) );
             }
 
@@ -36,6 +36,9 @@ function Tree(data) {
         var newLI = document.createElement("li");
         var nameNode = document.createTextNode(itemName);
         newLI.appendChild(nameNode);
+        newLI.className == '' ? newLI.setAttribute("class","icon-closed") :
+                            newLI.className += " icon-closed";
+                            // debugger;
         return newLI;
     }
 
