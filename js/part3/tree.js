@@ -67,7 +67,6 @@ function Tree(data) {
                 self.removeClass( targetArray[i], cssIconPlus );
                 self.addClass( targetArray[i], "leaf" );
             }
-
         }
     }
 
