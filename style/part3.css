@@ -4,35 +4,33 @@ ul {
     border-left: 2px dotted black;
     border-color: blue;
 }
-ul.clearBorder{
+ul.clearBorder {
     border-left: none;
 }
 li {
     padding: 0.8em 0.6em 0;
     text-indent: 1em;
 }
-li.leaf{
+li.leaf {
     padding: 0;
     margin-top: 0.5em;
     margin-left: -0.6em;
 }
 li.leaf:before {
-    content: "• ";
+    content: "•";
+    padding-right: 0.6em;
     color: blue;
 }
 .icon-closed {
-    /*display: inline-block;*/
     display: block;
     background: url('../images/plus.png') center no-repeat;
     background-position: 2px 14px;
 }
 .icon-opened {
-    /*display: inline-block;*/
     display: block;
     background: url('../images/minus.png') center no-repeat;
     background-position: 2px 14px;
 }
-
 .hide {
     display: none;
 }

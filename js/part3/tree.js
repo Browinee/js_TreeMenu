@@ -1,58 +1,54 @@
 function Tree(data) {
     var self = this;
-    this.data = data;
+    this.root = document.createElement("ul");
     var cssHide = "hide";
     var cssIconMinus = "icon-opened";
     var cssIconPlus = "icon-closed";
+    var cssLeaf = "leaf";
+
+    self.addClass( this.root, "clearBorder" );
+    traverse.call( this, data, this.root );
+    eventSetup(this.root.childNodes);
 
     //----------------------------------------
 
-    function traverse(obj, func, pos) {
-        for ( var key in obj ) {
+    function traverse(obj, pos) {
+        var data = obj;
 
-            if ( "name" === key ) {
-                var isLeaf = !obj.data ? true : false;  //currently a leaf node?
-                pos.appendChild( func.apply( this, [ obj[key] ] ) );
+        if ( !Array.isArray(obj) ) {    // Not an array -> an object
+            var name = obj.name;
+            data = obj.data;
+            var childLi = createLiAndShowName(name);
+            pos.appendChild(childLi);
+
+            if ( null == data || data.length == 0 ) {   // leaf node
+                setClass4Leaf(childLi);
+                return;
             }
+            // not leaf node, append <ul>
+            var childUL = pos = document.createElement("ul");
+            childLi.appendChild(childUL);
+        }
 
-            if (isLeaf)  setClass4Leaf();
-
-            if (  "object" === typeof(obj[key]) ) {
-                // when key == [number]
-                if (isLeaf === undefined) {
-                    traverse(obj[key], func, pos);
-                    continue;
-                }
-                // when key == "data" && not a leaf node
-                if (!isLeaf) {
-                    var newUL = document.createElement("ul");
-                    var allLI = pos.getElementsByTagName("li");
-                    var allUL = pos.getElementsByTagName("ul");
-                    allLI[ allLI.length - 1 ].insertAdjacentElement("beforeEnd", newUL);
-                    var posNext = allUL[ allUL.length - 1];
-                    traverse(obj[key], func, posNext);
-                 }
-            }
-        } //--End for loop
-    } //--End traverse
+        for ( var i = 0, l = data.length; i < l; i++ )
+            traverse( data[i], pos);
+    }
 
     //----------------------------------------
 
-    function createLiNode(itemName) {
+    function createLiAndShowName(itemName) {
         var newLI = document.createElement("li");
-        var nameNode = document.createTextNode(itemName);
-        newLI.appendChild(nameNode);
-        self.addClass(newLI, cssIconPlus);
-        self.addClass(newLI, cssHide);
+        newLI.innerHTML = itemName;
+        self.addClass( newLI, cssIconPlus );
+        self.addClass( newLI, cssHide );
         return newLI;
     }
 
     //----------------------------------------
 
-    function setClass4Leaf() {
-        var allLI = document.getElementsByTagName("li");
-        allLI[allLI.length - 1].setAttribute("class","leaf");
-        self.addClass( allLI[allLI.length - 1], cssHide );
+    function setClass4Leaf(leaf) {
+        leaf.setAttribute( "class", cssLeaf );
+        self.addClass( leaf, cssHide );
     }
 
     //----------------------------------------
@@ -60,29 +56,29 @@ function Tree(data) {
     function eventSetup(targetArray) {
         for ( var i = 0, length = targetArray.length; i < length; i++ ) {
             self.removeClass( targetArray[i], cssHide );
-            if ( targetArray[i].lastChild.innerHTML ) {
-                self.addEvent(targetArray[i], "click", trigger);
-            } else {
-            // begins with a leaf node
+            if ( targetArray[i].lastChild.innerHTML )  // Not empty -> parent nodes
+                self.addEvent( targetArray[i], "click", trigger );
+            else {    // begins with a leaf node
                 self.removeClass( targetArray[i], cssIconPlus );
-                self.addClass( targetArray[i], "leaf" );
+                self.addClass( targetArray[i], cssLeaf );
             }
         }
     }
+
+    //----------------------------------------
 
     function trigger(e) {
         if ( e.target.lastChild.nodeName == "UL" ) {
             var nodes = e.target.lastChild.childNodes;
             var length = nodes.length;
-            // Expand menu
-            if ( self.hasClass( e.target, cssIconPlus ) )
+
+            if ( self.hasClass( e.target, cssIconPlus ) )   // Expand menu
                 for ( var i = 0; i < length; i++ ) {
                     self.removeClass( nodes[i], cssHide );
                     self.removeClass( e.target, cssIconPlus );
                     self.addClass( e.target, cssIconMinus );
                 }
-            // Collapse menu
-            else
+            else   // Collapse menu
                 for ( var i = 0; i < length; i++ ) {
                     self.addClass( nodes[i], cssHide );
                     self.removeClass( e.target, cssIconMinus );
@@ -91,48 +87,42 @@ function Tree(data) {
         }
     }
 
+}   //--End class Tree
+
+
 //----------------------------------------------------------------
 //                            public
 //----------------------------------------------------------------
 
-    this.render = function(pos) {
-        var firstUL = document.body.getElementsByTagName("ul")[0];
-        if ( undefined == firstUL ) {
-            var newUL = document.createElement("ul");
-            document.body.appendChild(newUL);
-            firstUL = document.body.getElementsByTagName("ul")[0];
-            self.addClass(firstUL,"clearBorder");
-            traverse.call(this, data, createLiNode, firstUL);
 
-        } else
-            traverse.call(this, data, createLiNode, pos);
+Tree.prototype = {
+    root: null,
 
-        eventSetup(firstUL.childNodes);
-    }
+    render: function(pos) {
+        pos.appendChild(this.root);
+    },
 
-}   //--End class Tree
-
-    Tree.prototype.hasClass = function(element, className) {
+    hasClass: function(element, className) {
         var reg = new RegExp('(\s|^)*'+className+'(\s|$)');
-        return element === null ? false : element.className.match(reg);
-    }
+        return element == null ? false : element.className.match(reg);
+    },
 
-    Tree.prototype.addClass = function(element, className) {
+    addClass: function(element, className) {
         if (!this.hasClass(element, className)) {
             element.className += " "+className;
             element.className = element.className.trim();
         }
-    }
+    },
 
-    Tree.prototype.removeClass = function(element, className) {
+    removeClass: function(element, className) {
         if (this.hasClass(element, className)) {
             var reg = new RegExp('(\s|^)*'+className+'(\s|$)*');
             element.className = element.className.replace(reg,' ');
             element.className = element.className.trim();
         }
-    }
+    },
 
-    Tree.prototype.addEvent = function(obj, type, handle) {
+    addEvent: function(obj, type, handle) {
         try {  // Versions above Chrome、FireFox、Opera、Safari、IE9.0
             obj.addEventListener(type, handle, false);
         }catch(e) {
@@ -143,3 +133,5 @@ function Tree(data) {
             }
         }
     }
+
+}
